@@ -6,6 +6,8 @@ const { errorHandler } = require('./middleware/error.middleware');
 const cors = require('cors')
 
 const app = express();
+app.set('view engine', 'ejs');
+
 
 app.use(cors());
 app.use(express.json({ limit: "16kb" })); // Parse JSON bodies
@@ -14,8 +16,9 @@ const prefix = process.env.NODE_ENV
 const version = process.env.VERSION || "v1"
 
 app.get('/', (req, res) => {
-  res.send('Hello, World!');
+  res.render('index', { title: 'Welcome to my Node.js app' });
 });
+app.use(express.static('uploads'));
 
 const port = process.env.PORT || 3000;
 
@@ -24,7 +27,7 @@ app.use(errorHandler)
 
 db.sequelize
   .sync({ force: false })
-  .then(async () => {
+  .then( () => {
     app.listen(port, () =>
       console.log(`Server listening on port ${port} in ${prefix} environment`)
     );

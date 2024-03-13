@@ -15,8 +15,10 @@ module.exports = {
   }),
   addDetail: AsyncHandler(async (req, res) => {
     const input = req.body
+    const file = req.files
+    input.profileimage = file.profileimage[0].path
     input.password = bcryptHelper.hash(input.password)
-    await userServices.create(input)
+    await userServices.create(input, file)
     res.status(201).json(new ApiResponse(201, {}, "Succesfully added"))
   }),
   updateDetails: AsyncHandler(async (req, res) => {

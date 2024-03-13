@@ -2,8 +2,8 @@ const { Op } = require("sequelize")
 const db = require("../../models")
 
 module.exports = {
-    create: async (data) => {
-        return await db.users.create(data)
+    create: async (data, file) => {
+        return await db.users.create(data, file)
     },
     getAll: async () => {
         return await db.users.findAll()
