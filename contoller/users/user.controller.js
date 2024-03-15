@@ -3,6 +3,7 @@ const ApiError = require("../../utils/handlers/Apierrorhandler");
 const { ApiResponse } = require("../../utils/handlers/Apiresponse");
 const AsyncHandler = require("../../utils/handlers/Async.handler");
 const bcryptHelper = require("../../utils/helper/bcrypt.helper");
+const sendEmail = require('../../utils/helper/email.helper')
 
 module.exports = {
   loginDetails: AsyncHandler(async (req, res) => {
@@ -23,11 +24,19 @@ module.exports = {
   }),
   updateDetails: AsyncHandler(async (req, res) => {
     const input = req.body
+    const file = req.files
+    const useremail = req.body.email
+    input.profileimage = file.profileimage[0].path
     input.id = req.params.id
     if (input.password) {
       input.password = bcryptHelper.hash(input.password)
     }
+    console.log(useremail)
     await userServices.update(input)
+    const userEmail = useremail; // Replace with actual user email
+    const emailSubject = 'Profile Updated';
+    const emailText = 'Your profile has been successfully updated.';
+    await sendEmail(userEmail, emailSubject, emailText);
     res.status(202).json(new ApiResponse(201, {}, "Succesfully updated"))
 
   }),
