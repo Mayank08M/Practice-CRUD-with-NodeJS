@@ -4,6 +4,8 @@ const { ApiResponse } = require("../../utils/handlers/Apiresponse");
 const AsyncHandler = require("../../utils/handlers/Async.handler");
 const bcryptHelper = require("../../utils/helper/bcrypt.helper");
 const sendEmail = require('../../utils/helper/email.helper')
+require('dotenv').config();
+
 
 module.exports = {
   loginDetails: AsyncHandler(async (req, res) => {
@@ -31,12 +33,15 @@ module.exports = {
     if (input.password) {
       input.password = bcryptHelper.hash(input.password)
     }
-    console.log(useremail)
+    // console.log(useremail)
     await userServices.update(input)
-    const userEmail = useremail; // Replace with actual user email
-    const emailSubject = 'Profile Updated';
-    const emailText = 'Your profile has been successfully updated.';
-    await sendEmail(userEmail, emailSubject, emailText);
+    const emailOptions = {
+      to: useremail,
+      subject: 'Profile Updated',
+      text: 'Your profile has been successfully updated.',
+    };
+    await sendEmail(emailOptions);
+    // console.log(emailOptions.subject, emailOptions.text)
     res.status(202).json(new ApiResponse(201, {}, "Succesfully updated"))
 
   }),
