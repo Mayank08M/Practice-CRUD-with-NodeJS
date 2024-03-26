@@ -1,3 +1,4 @@
+const { query } = require("express");
 const { userServices } = require("../../services");
 const ApiError = require("../../utils/handlers/Apierrorhandler");
 const { ApiResponse } = require("../../utils/handlers/Apiresponse");
@@ -52,5 +53,10 @@ module.exports = {
   getByID: AsyncHandler(async (req, res) => {
     const users = await userServices.getByID(req.params.id)
     res.status(200).json(new ApiResponse(200, { users }, "User retrived succesfully"))
+  }),
+  searchUser: AsyncHandler(async (req, res) => {
+    const { username } = req.query
+    const users = await userServices.searchUser(username)
+    res.status(200).json(new ApiResponse(200, { users }, "User found succesfully"))
   }),
 }

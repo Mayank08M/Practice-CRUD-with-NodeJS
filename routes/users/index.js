@@ -14,4 +14,5 @@ userRoutes.put('/updateprofile/:id', handle_recipe_files.fields([
   { name: "profileimage", maxCount: 1 },
 ]), userController.updateDetails)
 userRoutes.get('/getByID/:id', userController.getByID)
+userRoutes.get('/search', userController.searchUser)
 module.exports = userRoutes

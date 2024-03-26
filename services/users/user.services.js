@@ -1,5 +1,6 @@
 const { Op } = require("sequelize")
 const db = require("../../models")
+const { query } = require("express")
 
 module.exports = {
     create: async (data, file) => {
@@ -16,5 +17,12 @@ module.exports = {
     },
     getByID: async (id) => {
         return await db.users.findByPk(id)
-    }
+    },
+    searchUser: async (query) => {
+        const user = await db.users.findAll({ where: { username: { [Op.like]: `%${query}%` }}})
+        if (user.length==0){
+            throw new Error("User not found.")
+        }
+        return user
+    },
 }
