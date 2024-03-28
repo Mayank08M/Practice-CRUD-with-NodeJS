@@ -13,6 +13,7 @@ module.exports = {
         return await db.users.update(data, { where: { id: { [Op.eq]: data.id } } })
     },
     getByEmail: async (email) => {
+        console.log(email)
         return await db.users.findOne({ where: { email: { [Op.eq]: email } } })
     },
     getByID: async (id) => {

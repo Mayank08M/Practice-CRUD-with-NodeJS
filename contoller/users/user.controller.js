@@ -10,12 +10,14 @@ require('dotenv').config();
 
 module.exports = {
   loginDetails: AsyncHandler(async (req, res) => {
+    console.log(req.body)
     const { email, password } = req.body
     const user = await userServices.getByEmail(email)
     if (!user) throw new ApiError(404, "User not found")
     const compare = bcryptHelper.compare(password, user.password)
     if (!compare) throw new ApiError(401, "Invalid credentials")
     res.status(200).json(new ApiResponse(200, user, "Login Succesfull"))
+  
   }),
   addDetail: AsyncHandler(async (req, res) => {
     const input = req.body
